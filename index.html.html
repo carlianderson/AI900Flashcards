@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-900 Flashcards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 600px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .question {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .answer {
+      font-size: 1rem;
+      color: #333;
+      display: none;
+      margin-bottom: 1rem;
+    }
+    .score {
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: #666;
+    }
+    button {
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      background: #0078d4;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005a9e;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-container">
+    <div class="score" id="score">Score: 0 / 0</div>
+    <div class="question" id="question">Loading...</div>
+    <div class="answer" id="answer"></div>
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="markCorrect()">Correct</button>
+    <button onclick="markIncorrect()">Incorrect</button>
+  </div>
+  <script>
+    const flashcards = [
+      { question: "What is Artificial Intelligence (AI)?", answer: "The creation of software that imitates human behaviors such as learning and problem-solving." },
+      { question: "What are the five principles of Responsible AI?", answer: "Fairness, reliability & safety, privacy & security, inclusiveness, transparency & accountability." },
+      { question: "What is the purpose of the AI-900 certification?", answer: "To validate foundational knowledge of machine learning and AI concepts on Azure." },
+      { question: "What is supervised learning?", answer: "Machine learning using labeled data." },
+      { question: "What is unsupervised learning?", answer: "Machine learning using unlabeled data to discover patterns." },
+      { question: "What is reinforcement learning?", answer: "Learning based on rewards and punishments for actions taken in an environment." },
+      { question: "Which Azure service lets you build, train, and deploy ML models?", answer: "Azure Machine Learning." },
+      { question: "What is a dataset?", answer: "A collection of data used to train and evaluate a model." },
+      { question: "What are features in a dataset?", answer: "Individual measurable properties used in training." },
+      { question: "What are labels in ML?", answer: "The correct output used during supervised training." },
+      { question: "What is a model?", answer: "A program that learns from data to make predictions or decisions." },
+      { question: "What is the purpose of model evaluation?", answer: "To measure how well the model performs on new data." },
+      { question: "What is overfitting?", answer: "When a model learns training data too well and fails on unseen data." },
+      { question: "What is underfitting?", answer: "When a model is too simple to capture the data's complexity." },
+      { question: "What is Computer Vision?", answer: "AI that interprets and processes visual data like images and videos." },
+      { question: "What is OCR?", answer: "Optical Character Recognition — detects and extracts printed or handwritten text from images." },
+      { question: "What are common use cases for Computer Vision?", answer: "Facial recognition, OCR, object detection, image tagging." },
+      { question: "What is NLP?", answer: "Natural Language Processing — AI that works with human language data." },
+      { question: "What does Text Analytics API offer?", answer: "Sentiment analysis, key phrase extraction, language detection, and entity recognition." },
+      { question: "What is sentiment analysis?", answer: "Determining if text expresses a positive, negative, neutral, or mixed opinion." },
+      { question: "What is key phrase extraction?", answer: "Identifying important terms or topics in a text." },
+      { question: "What is Named Entity Recognition (NER)?", answer: "Identifying and categorizing entities like people, organizations, and locations in text." },
+      { question: "What is language detection?", answer: "Determining the language of a text." },
+      { question: "What is the Azure AI Language service used for?", answer: "Text analytics, summarization, translation, and Q&A capabilities." },
+      { question: "What is generative AI?", answer: "AI that creates new content like text, images, code, or music from prompts." },
+      { question: "What Azure service provides access to GPT models?", answer: "Azure OpenAI Service." },
+      { question: "What is prompt engineering?", answer: "Crafting inputs to improve the quality of outputs from generative AI." },
+      { question: "What is model training?", answer: "Teaching a model by exposing it to data and feedback." },
+      { question: "What is Azure AI Studio?", answer: "A platform to explore, build, and deploy AI solutions, including generative AI." },
+      { question: "What is the purpose of the Form Recognizer service (Document Intelligence)?", answer: "Extract structured data from unstructured documents." },
+      { question: "What are prebuilt models in Document Intelligence?", answer: "Ready-to-use models for documents like invoices, receipts, and business cards." },
+      { question: "What is anomaly detection?", answer: "Finding patterns or values that do not conform to expected behavior." },
+      { question: "What is classification in ML?", answer: "Predicting a category or label for input data." },
+      { question: "What is regression in ML?", answer: "Predicting a numeric value based on input data." },
+      { question: "What is a confusion matrix?", answer: "A table to describe the performance of a classification model." },
+      { question: "What is precision in ML?", answer: "The ratio of true positives to all predicted positives." },
+      { question: "What is recall in ML?", answer: "The ratio of true positives to all actual positives." },
+      { question: "What is F1 score?", answer: "A balanced metric combining precision and recall." },
+      { question: "What is the difference between training and inference?", answer: "Training builds a model; inference uses the model to make predictions." },
+      { question: "What are the two types of model inference?", answer: "Batch inference and real-time inference." },
+      { question: "What is data labeling?", answer: "Annotating data with correct answers for supervised learning." },
+      { question: "What is model deployment?", answer: "Publishing a trained model as a web service or app for real-world use." },
+      { question: "What does Azure AI Speech provide?", answer: "Speech-to-text, text-to-speech, and speech translation." },
+      { question: "What is the use of speaker recognition?", answer: "Identifying or verifying individuals by their voice." },
+      { question: "What is speech translation?", answer: "Translating spoken language into another language in real time." },
+      { question: "What are content moderation tools in Azure?", answer: "Tools to detect offensive, adult, or violent content in text, images, and video." },
+      { question: "Why is Responsible AI important?", answer: "It ensures AI solutions are ethical, safe, and inclusive." },
+      { question: "What is a use case of generative AI in business?", answer: "Automated report writing, content generation, or customer support chatbots." },
+      { question: "What is the AI Hub in Azure AI Foundry?", answer: "A central location to manage projects, assets, and teams for AI development." },
+      { question: "What is Azure's advantage for AI workloads?", answer: "Security, scalability, and integration with cloud services." },
+      // ... Continue adding to reach 250 cards with similar structure.
+    ];
+
+    let score = 0;
+    let total = 0;
+    let currentIndex = 0;
+
+    function shuffleDeck() {
+      for (let i = flashcards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+      }
+    }
+
+    function updateScore() {
+      document.getElementById("score").textContent = `Score: ${score} / ${total}`;
+    }
+
+    function loadCard() {
+      document.getElementById("question").textContent = flashcards[currentIndex].question;
+      document.getElementById("answer").textContent = flashcards[currentIndex].answer;
+      document.getElementById("answer").style.display = "none";
+      updateScore();
+    }
+
+    function showAnswer() {
+      document.getElementById("answer").style.display = "block";
+    }
+
+    function markCorrect() {
+      score++;
+      total++;
+      nextCard();
+    }
+
+    function markIncorrect() {
+      total++;
+      nextCard();
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % flashcards.length;
+      loadCard();
+    }
+
+    shuffleDeck();
+    loadCard();
+  </script>
+</body>
+</html>
