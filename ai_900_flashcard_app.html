@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-900 Flashcards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 80%;
+      max-width: 600px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .question {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .answer {
+      font-size: 1rem;
+      color: #333;
+      display: none;
+      margin-bottom: 1rem;
+    }
+    button {
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      background: #0078d4;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005a9e;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-container">
+    <div class="question" id="question">Loading...</div>
+    <div class="answer" id="answer"></div>
+    <button onclick="showAnswer()">Show Answer</button>
+    <button onclick="nextCard()">Next</button>
+  </div>
+
+  <script>
+    const flashcards = [
+      { question: "What is AI in Azure?", answer: "Artificial Intelligence that enables applications to perceive, learn, and act." },
+      { question: "What are the main types of AI workloads in Azure?", answer: "Machine Learning, Anomaly Detection, Computer Vision, Natural Language Processing, Generative AI." },
+      { question: "What is the Azure service for building custom machine learning models?", answer: "Azure Machine Learning." },
+      { question: "What does the Text Analytics API do?", answer: "It performs NLP tasks like sentiment analysis, key phrase extraction, entity recognition, and language detection." },
+      { question: "What is Azure OpenAI Service used for?", answer: "Accessing generative AI models like GPT-4 for tasks like text generation, summarization, and chatbots." },
+      { question: "What is Responsible AI?", answer: "A set of principles to ensure AI systems are fair, reliable, secure, inclusive, transparent, and accountable." },
+      { question: "What does Azure AI Vision do?", answer: "Extracts insights from images and videos using features like OCR, object detection, and facial analysis." },
+      { question: "What does Azure AI Speech do?", answer: "Enables speech-to-text, text-to-speech, speech translation, and speaker recognition." },
+      { question: "What is prompt engineering?", answer: "The practice of designing input prompts to guide generative AI models to produce better output." },
+      { question: "What should you NOT do with API keys?", answer: "You should not share API keys as they can be misused to access services or incur costs." },
+      { question: "What are prebuilt models in Document Intelligence used for?", answer: "To extract data from invoices, receipts, IDs, business cards, and more without custom training." },
+      { question: "What is Azure AI Language used for?", answer: "To perform NLP tasks like entity recognition, text classification, summarization, and Q&A." },
+      { question: "What is the benefit of Azure hosting OpenAI models?", answer: "Enterprise security, compliance, privacy, and scalability in a trusted cloud environment." },
+      { question: "What is Azure AI Studio?", answer: "A unified UI for building, evaluating, and deploying AI solutions, including generative AI workflows." },
+      { question: "What is the use of Language Detection in Text Analytics?", answer: "Detects the primary language of a text input and provides a confidence score." },
+      { question: "What is the purpose of Key Phrase Extraction?", answer: "To identify the most important terms and concepts from unstructured text." },
+      { question: "What does Named Entity Recognition (NER) do?", answer: "Identifies and categorizes entities like people, organizations, dates, and locations in text." },
+      { question: "What is the purpose of the AI-900 exam?", answer: "To validate foundational knowledge of AI concepts and Azure AI services." },
+      { question: "What is generative AI?", answer: "A type of AI that can generate text, images, code, or other content from natural language prompts." },
+      { question: "What are common use cases of Azure OpenAI Service?", answer: "Text summarization, email drafting, chatbot conversations, code generation, and document understanding." }
+    ];
+
+    let currentIndex = 0;
+
+    function loadCard() {
+      document.getElementById("question").textContent = flashcards[currentIndex].question;
+      document.getElementById("answer").textContent = flashcards[currentIndex].answer;
+      document.getElementById("answer").style.display = "none";
+    }
+
+    function showAnswer() {
+      document.getElementById("answer").style.display = "block";
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % flashcards.length;
+      loadCard();
+    }
+
+    loadCard();
+  </script>
+</body>
+</html>
